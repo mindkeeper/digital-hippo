@@ -2,32 +2,14 @@
 
 import { Icons } from '@/components/Icons';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { useCallback } from 'react';
-import { AuthCredentialValidator, TAuthCredentialValidator } from '@/lib/validators/account-credentials-validator';
-import { trpc } from '@/trpc/client';
+import { Form } from '@/components/ui/form';
+import InputItem from '@/components/core/inputItem';
+import { useRegister } from './hooks/useRegister';
 
 export default function Page() {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<TAuthCredentialValidator>({
-		resolver: zodResolver(AuthCredentialValidator),
-	});
-
-	const { data } = trpc.anyApiRoute.useQuery();
-	console.log(data);
-	const onSubmit = useCallback(({ email, password }: TAuthCredentialValidator) => {
-		console.log(email, password);
-	}, []);
+	const { form, isLoading, onSubmit, formItems } = useRegister();
 	return (
 		<>
 			<div className="container relative flex pt-20 flex-col items-center justify-center lg:px-0">
@@ -47,31 +29,28 @@ export default function Page() {
 						</Link>
 					</div>
 					<div className="grid gap-6">
-						<form onSubmit={handleSubmit(onSubmit)}>
-							<div className="grid gap-2">
-								<div className="grid gap-1 py-2">
-									<Label htmlFor="email">Email</Label>
-									<Input
-										{...register('email')}
-										className={cn({
-											'focus-visible:ring-red-500': errors.email,
-										})}
-										placeholder="you@example.com"
-									/>
+						<Form {...form}>
+							<form onSubmit={form.handleSubmit(onSubmit)}>
+								<div className="grid gap-2">
+									{formItems.map((form) => (
+										<div className="grid gap-1 py-2" key={form.name}>
+											<InputItem
+												label={form.label}
+												className={form.className}
+												name={form.name}
+												placeholder={form.placeholder}
+												type={form.type}
+											/>
+										</div>
+									))}
+
+									<Button disabled={isLoading}>
+										{isLoading ? <RotateCcw className="mr-2 h-4 w-4 animate-spin" /> : null}
+										Sign up
+									</Button>
 								</div>
-								<div className="grid gap-1 py-2">
-									<Label htmlFor="password">Password</Label>
-									<Input
-										{...register('password')}
-										className={cn({
-											'focus-visible:ring-red-500': errors.password,
-										})}
-										placeholder="Password"
-									/>
-								</div>
-								<Button>Sign up</Button>
-							</div>
-						</form>
+							</form>
+						</Form>
 					</div>
 				</div>
 			</div>
