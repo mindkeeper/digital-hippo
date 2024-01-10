@@ -3,14 +3,19 @@ import { slateEditor } from '@payloadcms/richtext-slate';
 import { buildConfig } from 'payload/config';
 import { viteBundler } from '@payloadcms/bundler-vite';
 import path from 'path';
+import Users from './app/collections/Users';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 export default buildConfig({
 	serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
-	collections: [],
+	collections: [Users],
 	routes: {
 		admin: '/sell',
 	},
 	admin: {
+		user: 'users',
 		bundler: viteBundler(),
 		meta: {
 			titleSuffix: '- Digital-hippo',
