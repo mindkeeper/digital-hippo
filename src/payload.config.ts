@@ -3,7 +3,7 @@ import { slateEditor } from '@payloadcms/richtext-slate';
 import { buildConfig } from 'payload/config';
 import { viteBundler } from '@payloadcms/bundler-vite';
 import path from 'path';
-import Users from './app/collections/Users';
+import Users from './collections/Users';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });

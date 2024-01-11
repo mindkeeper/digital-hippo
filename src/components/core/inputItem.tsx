@@ -17,7 +17,7 @@ export default function InputItem({ label, name, type = 'text', className, ...re
 		<FormField
 			name={name}
 			control={control}
-			render={({ field, fieldState }) => (
+			render={({ field }) => (
 				<FormItem>
 					{!label ? null : <FormLabel htmlFor={name}>{label}</FormLabel>}
 					<FormControl>
